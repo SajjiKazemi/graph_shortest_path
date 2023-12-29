@@ -173,7 +173,9 @@ std::vector<int> MyGraph::getShortestPath()
 void MyGraph::resetVisitedNodes()
 {
     this->unvisited_trees.clear();
+    this->unvisited_nodes.clear();
     this->visited_nodes.clear();
+    this->shortest_path.clear();
 }
 
 void MyGraph::resetEverything()

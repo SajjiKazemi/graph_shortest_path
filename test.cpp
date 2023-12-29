@@ -562,3 +562,62 @@ TEST_CASE("Loop for a node that exists in edges")
     std::cout.rdbuf(oldCout);
     CHECK(output.str() == "2\n");
 }
+
+TEST_CASE("HW test case with 2 to 5")
+{
+    MyGraph test_graph;
+    std::string line = "V 15";
+    std::string command = line_parser::get_command(line, test_graph);
+    line_parser::analyze_command(command, line, test_graph);
+    line = "E {<2,6>,<2,8>,<2,5>,<6,5>,<5,8>,<6,10>,<10,8>}";
+    command = line_parser::get_command(line, test_graph);
+    line_parser::analyze_command(command, line, test_graph);
+    line = "s 2 10";
+    command = line_parser::get_command(line, test_graph);
+    std::ostringstream output1;
+    std::streambuf* oldCout1 = std::cout.rdbuf(output1.rdbuf());
+    line_parser::analyze_command(command, line, test_graph);
+    std::cout.rdbuf(oldCout1);
+    CHECK(output1.str() == "2-6-10\n");
+
+    line = "s 2 5";
+    command = line_parser::get_command(line, test_graph);
+    std::ostringstream output;
+    std::streambuf* oldCout = std::cout.rdbuf(output.rdbuf());
+    line_parser::analyze_command(command, line, test_graph);
+    std::cout.rdbuf(oldCout);
+    CHECK(output.str() == "2-5\n");
+}
+
+TEST_CASE("HW's test case exactly")
+{
+    MyGraph test_graph;
+    std::string line = "V 15";
+    std::string command = line_parser::get_command(line, test_graph);
+    line_parser::analyze_command(command, line, test_graph);
+    line = "E {<2,6>,<2,8>,<2,5>,<6,5>,<5,8>,<6,10>,<10,8>}";
+    command = line_parser::get_command(line, test_graph);
+    line_parser::analyze_command(command, line, test_graph);
+    std::ostringstream output1;
+    std::streambuf* oldCout1 = std::cout.rdbuf(output1.rdbuf());
+    line = "s 2 10";
+    command = line_parser::get_command(line, test_graph);
+    line_parser::analyze_command(command, line, test_graph);
+    std::cout.rdbuf(oldCout1);
+    CHECK(output1.str() == "2-6-10\n");
+
+    line = "V 5";
+    command = line_parser::get_command(line, test_graph);
+    line_parser::analyze_command(command, line, test_graph);
+    line = "E {<1,3>,<3,2>,<3,4>,<4,5>,<5,2>}";
+    command = line_parser::get_command(line, test_graph);
+    line_parser::analyze_command(command, line, test_graph);
+    std::ostringstream output2;
+    std::streambuf* oldCout2 = std::cout.rdbuf(output2.rdbuf());
+    line = "s 5 1";
+    command = line_parser::get_command(line, test_graph);
+    line_parser::analyze_command(command, line, test_graph);
+    std::cout.rdbuf(oldCout2);
+    CHECK(output2.str() == "5-2-3-1\n");
+    
+}
