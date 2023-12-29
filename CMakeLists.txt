@@ -16,4 +16,4 @@ endif()
 add_executable(main main.cpp helpers.cpp)
 
 # create the executable for tests
-add_executable(tests test.cpp helpers.cpp MyGraph.cpp)
+add_executable(tests test.cpp helpers.cpp MyGraph.cpp BFStree.cpp)

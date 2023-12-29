@@ -6,6 +6,7 @@
 #include "doctest.h"
 #include "helpers.h"
 #include "MyGraph.h"
+#include "BFStree.h"
 
 TEST_CASE("Test line_parser::get_command") {
     std::string line = "V 15";
@@ -51,4 +52,19 @@ TEST_CASE("Test the MyGraph class")
     CHECK(test_graph.isConnected(3, 2) == true);
     CHECK(test_graph.isConnected(3, 4) == true);
     CHECK(test_graph.isConnected(3, 5) == false);
+
+}
+
+TEST_CASE("Test the BFStree class")
+{
+    // Test the BFsearch class
+    std::vector<int> children;
+    children.push_back(2);
+    children.push_back(3);
+    children.push_back(4);
+    BFStree test_tree(1, children);
+    CHECK(test_tree.getRootNode() == 1);
+    CHECK(test_tree.getChildren()[0] == 2);
+    CHECK(test_tree.getChildren()[1] == 3);
+    CHECK(test_tree.getChildren()[2] == 4);
 }
