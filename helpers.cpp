@@ -67,7 +67,7 @@ namespace line_parser{
 
             input >> prefix >> start >> end;
             graph.findShortestPath(start, end);
-            for(int i = 0; i < graph.getShortestPath().size(); i++)
+            for(std::vector<int>::size_type i = 0; i < graph.getShortestPath().size(); i++)
             {
                 if (i < graph.getShortestPath().size() - 1)
                 {

@@ -120,7 +120,7 @@ TEST_CASE("More tests on MyGraph class")
     my_graph.getUnvisitedTrees();
     CHECK(my_graph.unvisited_trees.size() == 3);
     std::vector<int> nodes;
-    for (int i = 0; i < my_graph.unvisited_trees.size(); i++)
+    for (std::vector<int>::size_type i = 0; i < my_graph.unvisited_trees.size(); i++)
     {
         nodes.push_back(my_graph.unvisited_trees[i].getRootNode());
     }

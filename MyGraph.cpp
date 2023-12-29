@@ -69,7 +69,7 @@ bool MyGraph::isConnected(int start, int end)
 void MyGraph::createRootTree(int start)
 {
     BFStree root_tree = BFStree(start, this->getConnections(start));
-    for (int i = 0; i < root_tree.getChildren().size(); i++)
+    for (std::vector<int>::size_type i = 0; i < root_tree.getChildren().size(); i++)
     {
         root_tree.addGrandchild(BFStree(root_tree.getChildren()[i], this->getConnections(root_tree.getChildren()[i]), root_tree));            
     }
@@ -94,7 +94,7 @@ void MyGraph::getUnvisitedTrees()
     int controller = this->unvisited_trees.size();
     for(int i=0; i < controller; i++)
     {
-        for(int j=0; j<this->unvisited_trees[i].getChildren().size(); j++)
+        for(std::vector<int>::size_type j=0; j<this->unvisited_trees[i].getChildren().size(); j++)
         {
             if(std::find(this->visited_nodes.begin(), this->visited_nodes.end(), this->unvisited_trees[i].getChildren()[j]) == this->visited_nodes.end())
             {
@@ -128,7 +128,7 @@ std::vector<int> MyGraph::findShortestPath(int start, int end)
         bool found = false;
         while (found != true && this->unvisited_trees.size() != 0)
         {
-            for (int i=0; i<unvisited_trees.size(); i++)
+            for (std::vector<int>::size_type i=0; i<unvisited_trees.size(); i++)
             {
                 if(checkTree(unvisited_trees[i], end))
                 {
