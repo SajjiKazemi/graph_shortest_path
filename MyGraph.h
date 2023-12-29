@@ -12,11 +12,13 @@ private:
     int num_vertices;
 
 public:
-    MyGraph(int num_vertices);
     std::map<int, std::pair<int, int>> edges;
     std::vector<BFStree> unvisited_trees;
     std::vector<int> visited_nodes;
     std::vector<int> unvisited_nodes;
+    MyGraph();
+    MyGraph(int num_vertices);
+    void setNoVertices(int num_vertices);
     int getSize();
     void setEdges(std::map<int, std::pair<int,int>> edges);
     std::vector<int> getConnections(int node);

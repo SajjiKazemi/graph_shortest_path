@@ -4,6 +4,11 @@
 #include "BFStree.h"
 
 // Constructor definition
+MyGraph::MyGraph()
+{
+    this->num_vertices = 0;
+}
+
 MyGraph::MyGraph(int num_vertices)
 {
     this->num_vertices = num_vertices;
@@ -18,6 +23,11 @@ int MyGraph::getSize()
 void MyGraph::setEdges(std::map<int, std::pair<int,int>> edges)
 {
     this->edges = edges;
+}
+
+void MyGraph::setNoVertices(int num_vertices)
+{
+    this->num_vertices = num_vertices;
 }
 
 std::vector<int> MyGraph::getConnections(int node)

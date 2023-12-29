@@ -23,6 +23,14 @@ TEST_CASE("Test line_parser::get_command") {
     CHECK(command3 == "s");
 }
 
+TEST_CASE("Test default constructor of MyGraph class")
+{
+    MyGraph test_graph;
+    CHECK(test_graph.getSize() == 0);
+    test_graph.setNoVertices(5);
+    CHECK(test_graph.getSize() == 5);
+}
+
 TEST_CASE("Test the MyGraph class")
 {
     // Check the getSize() function
