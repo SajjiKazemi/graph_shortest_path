@@ -7,6 +7,9 @@
 #include "helpers.h"
 #include "MyGraph.h"
 #include "BFStree.h"
+#include <iostream>
+#include <algorithm>
+#include <vector>
 
 TEST_CASE("Test line_parser::get_command") {
     std::string line = "V 15";
@@ -52,6 +55,23 @@ TEST_CASE("Test the MyGraph class")
     CHECK(test_graph.isConnected(3, 2) == true);
     CHECK(test_graph.isConnected(3, 4) == true);
     CHECK(test_graph.isConnected(3, 5) == false);
+
+    // Check the createRootTree method
+    edges[4] = std::make_pair(1, 5);
+    edges[5] = std::make_pair(1, 2);
+    edges[6] = std::make_pair(1, 3);
+    test_graph.setEdges(edges);
+    test_graph.createRootTree(1);
+    CHECK(test_graph.unvisited_trees[0].getRootNode() == 1);
+    CHECK(std::find(test_graph.unvisited_trees[0].getChildren().begin(), 
+        test_graph.unvisited_trees[0].getChildren().end(), 2) != test_graph.unvisited_trees[0].getChildren().end());
+    CHECK(std::find(test_graph.unvisited_trees[0].getChildren().begin(), 
+        test_graph.unvisited_trees[0].getChildren().end(), 3) != test_graph.unvisited_trees[0].getChildren().end());
+        CHECK(std::find(test_graph.unvisited_trees[0].getChildren().begin(), 
+        test_graph.unvisited_trees[0].getChildren().end(), 4) != test_graph.unvisited_trees[0].getChildren().end());
+        CHECK(std::find(test_graph.unvisited_trees[0].getChildren().begin(), 
+        test_graph.unvisited_trees[0].getChildren().end(), 5) != test_graph.unvisited_trees[0].getChildren().end());
+    CHECK(test_graph.unvisited_trees[0].getAncestors().size() == 0);
 
 }
 

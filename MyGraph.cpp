@@ -1,6 +1,7 @@
 #include "MyGraph.h"
 #include <vector>
 #include <algorithm>
+#include "BFStree.h"
 
 // Constructor definition
 MyGraph::MyGraph(int num_vertices)
@@ -51,4 +52,13 @@ bool MyGraph::isConnected(int start, int end)
                 return false;
             }
     }
-    
+
+void MyGraph::createRootTree(int start)
+{
+    BFStree root_tree = BFStree(start, this->getConnections(start));
+    for (int i = 0; i < root_tree.getChildren().size(); i++)
+    {
+        root_tree.addGrandchild(BFStree(root_tree.getChildren()[i], this->getConnections(root_tree.getChildren()[i]), root_tree));            
+    }
+    this->unvisited_trees.push_back(root_tree);
+}
