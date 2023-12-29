@@ -1,4 +1,5 @@
 #include "helpers.h"
+#include "MyGraph.h"
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -25,11 +26,12 @@ namespace line_parser{
         }
         else{
             command = "Error";
+            std::cout << "Error: invalid command" << std::endl;
         }
         return command;
     }    
 
-    std::vector<std::string> analyze_command(std::string command, std::string line)
+    void analyze_command(std::string command, std::string line, MyGraph &graph)
     {
         std::vector<std::string> result;
         if(command == "V")
@@ -39,23 +41,22 @@ namespace line_parser{
             int number;
 
             input >> prefix >> number;
-            result.push_back(std::to_string(number));            
-            return result;
+            graph.setNoVertices(number);
         }
         else if (command == "E")
         {
+            std::map<int, std::pair<int, int>> edges;
             std::regex pattern(R"(<(\d+),(\d+)>)");
-            std::sregex_token_iterator iter(line.begin(), line.end(), pattern, {1,2});
-            std::sregex_token_iterator end;
+            std::sregex_iterator iter(line.begin(), line.end(), pattern);
+            std::sregex_iterator end;
+            int i = 0;
             while (iter != end) 
             {
-                std::ostringstream oss;
-                oss << "(" << *iter++ << ", " << *iter++ << ")";
-                std::string pair = oss.str();
-                result.push_back(pair);
+                i++;
+                auto match = *iter++;
+                edges[i] = std::make_pair(std::stoi(match[1]), std::stoi(match[2]));
             }
-            std::cout << result[0] << result[1] << result[2] << std::endl;
-            return result;
+            graph.setEdges(edges);
         }
         else if (command == "s")
         {
@@ -65,14 +66,19 @@ namespace line_parser{
             int end;
 
             input >> prefix >> start >> end;
-            result.push_back(std::to_string(start));
-            result.push_back(std::to_string(end));
-            std::cout << result[0] << result[1] << std::endl;
-            return result;
+            graph.findShortestPath(start, end);
+            for(int i = 0; i < graph.getShortestPath().size(); i++)
+            {
+                if (i < graph.getShortestPath().size() - 1)
+                {
+                    std::cout << graph.getShortestPath()[i] << "-";
+                }
+                else
+                {
+                    std::cout << graph.getShortestPath()[i] << std::endl;
+                }
+            }
         }
-        
-
-        
     }
 
 }

@@ -132,7 +132,7 @@ TEST_CASE("More tests on MyGraph class")
 
 TEST_CASE("Test on finding the shortest path")
 {
-    // Check the getShortestPath method
+    // Check the findShortestPath method
     MyGraph short_graph(10);
     std::map<int, std::pair<int,int>> edges;
     edges[1] = std::make_pair(2, 3);
@@ -150,14 +150,14 @@ TEST_CASE("Test on finding the shortest path")
     edges[13] = std::make_pair(2, 2);
     short_graph.setEdges(edges);
 
-    std::vector<int> shortest_path = short_graph.getShortestPath(2, 5);
+    std::vector<int> shortest_path = short_graph.findShortestPath(2, 5);
     CHECK(shortest_path[0] == 2);
     CHECK(shortest_path[1] == 3);
     CHECK(shortest_path[2] == 4);
     CHECK(shortest_path[3] == 5);
     CHECK(shortest_path.size() == 4);
 
-    std::vector<int> shortest_path2 = short_graph.getShortestPath(2, 6);
+    std::vector<int> shortest_path2 = short_graph.findShortestPath(2, 6);
     CHECK(shortest_path2[0] == 2);
     CHECK(shortest_path2[1] == 7);
     CHECK(shortest_path2[2] == 6);
@@ -215,7 +215,7 @@ TEST_CASE("Trying HW's test case 1")
     edges[6] = std::make_pair(6, 10);
     edges[7] = std::make_pair(10, 8);
     hw_graph.setEdges(edges);
-    std::vector<int> shortest_path = hw_graph.getShortestPath(2, 10);
+    std::vector<int> shortest_path = hw_graph.findShortestPath(2, 10);
     CHECK(shortest_path[0] == 2);
     bool condition = (shortest_path[1] == 6 || shortest_path[1] == 8);
     CHECK(condition == true);
@@ -233,7 +233,7 @@ TEST_CASE("Trying HW's test case 2")
     edges[4] = std::make_pair(4, 5);
     edges[5] = std::make_pair(5, 2);
     hwt2.setEdges(edges);
-    std::vector<int> shortest_path = hwt2.getShortestPath(5, 1);
+    std::vector<int> shortest_path = hwt2.findShortestPath(5, 1);
     CHECK(shortest_path[0] == 5);
     CHECK(shortest_path[1] == 2);
     CHECK(shortest_path[2] == 3);
@@ -250,7 +250,82 @@ TEST_CASE("If loop happens")
     edges[3] = std::make_pair(4, 5);
     edges[4] = std::make_pair(5, 2);
     loop_graph.setEdges(edges);
-    std::vector<int> shortest_path = loop_graph.getShortestPath(2, 2);
+    std::vector<int> shortest_path = loop_graph.findShortestPath(2, 2);
     CHECK(shortest_path[0] == 2);
     CHECK(shortest_path.size() == 1);
+}
+
+TEST_CASE("Test the line parses for E")
+{
+    MyGraph test_graph;
+    std::string line = "E {<2,6>,<2,8>,<2,5>,<6,5>,<5,8>,<6,10>,<10,8>}";
+    std::string command = line_parser::get_command(line);
+    CHECK(command == "E");
+    line_parser::analyze_command(command, line, test_graph);
+    CHECK(test_graph.edges[1].first == 2);
+    CHECK(test_graph.edges[1].second == 6);
+    CHECK(test_graph.edges[2].first == 2);
+    CHECK(test_graph.edges[2].second == 8);
+    CHECK(test_graph.edges[3].first == 2);
+    CHECK(test_graph.edges[3].second == 5);
+    CHECK(test_graph.edges[4].first == 6);
+    CHECK(test_graph.edges[4].second == 5);
+    CHECK(test_graph.edges[5].first == 5);
+    CHECK(test_graph.edges[5].second == 8);
+    CHECK(test_graph.edges[6].first == 6);
+    CHECK(test_graph.edges[6].second == 10);
+    CHECK(test_graph.edges[7].first == 10);
+    CHECK(test_graph.edges[7].second == 8);
+}
+
+TEST_CASE("Test the line parser for V")
+{
+    MyGraph test_graph;
+    std::string line = "V 15";
+    std::string command = line_parser::get_command(line);
+    CHECK(command == "V");
+    line_parser::analyze_command(command, line, test_graph);
+    CHECK(test_graph.getSize() == 15);
+}
+
+TEST_CASE("Test the line parser for all")
+{
+    MyGraph test_graph;
+    std::string line = "V 15";
+    std::string command = line_parser::get_command(line);
+    CHECK(command == "V");
+    line_parser::analyze_command(command, line, test_graph);
+    CHECK(test_graph.getSize() == 15);
+    std::string line2 = "E {<2,6>,<2,8>,<2,5>,<6,5>,<5,8>,<6,10>,<10,8>}";
+    std::string command2 = line_parser::get_command(line2);
+    CHECK(command2 == "E");
+    line_parser::analyze_command(command2, line2, test_graph);
+
+    std::string line3 = "s 2 10";
+    std::string command3 = line_parser::get_command(line3);
+    CHECK(command3 == "s");
+    line_parser::analyze_command(command3, line3, test_graph);
+    CHECK(test_graph.shortest_path[0] == 2);
+    bool condition = (test_graph.shortest_path[1] == 6 || test_graph.shortest_path[1] == 8);
+    CHECK(condition == true);
+    CHECK(test_graph.shortest_path[2] == 10);
+    CHECK(test_graph.shortest_path.size() == 3);   
+}
+
+TEST_CASE("Check the standard output")
+{
+    MyGraph test_graph;
+    std::string line = "V 15";
+    std::string command = line_parser::get_command(line);
+    line_parser::analyze_command(command, line, test_graph);
+    std::string line2 = "E {<2,6>,<2,8>,<2,5>,<6,5>,<5,8>,<6,10>,<10,8>}";
+    std::string command2 = line_parser::get_command(line2);
+    line_parser::analyze_command(command2, line2, test_graph);
+    std::string line3 = "s 2 10";
+    std::string command3 = line_parser::get_command(line3);
+    std::ostringstream output;
+    std::streambuf* oldCout = std::cout.rdbuf(output.rdbuf());
+    line_parser::analyze_command(command3, line3, test_graph);
+    std::cout.rdbuf(oldCout);
+    CHECK(output.str() == "2-6-10\n");    
 }
