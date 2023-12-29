@@ -98,6 +98,13 @@ std::vector<int> MyGraph::getShortestPath(int start, int end)
 {
     clearEverything();
     std::vector<int> shortest_path;
+    
+    if (start == end)
+    {
+        shortest_path.push_back(start);
+        return shortest_path;
+    }
+    
     createRootTree(start);
 
     if(checkTree(this->unvisited_trees[0], end) == true)
