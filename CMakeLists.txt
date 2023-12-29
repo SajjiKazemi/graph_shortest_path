@@ -3,6 +3,7 @@ project(find_shortest_path)
 
 # enable c++11 support
 set (CMAKE_CXX_FLAGS "-std=c++11 -Wall ${CMAKE_CXX_FLAGS}")
+set (CMAKE_BUILD_TYPE Debug)
 
 option(WITH_ASAN "Enabled AddressSanitizer to detect memory faults" OFF)
 if(WITH_ASAN)
