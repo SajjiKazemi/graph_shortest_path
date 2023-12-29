@@ -120,7 +120,40 @@ TEST_CASE("More tests on MyGraph class")
     CHECK(std::find(nodes.begin(), nodes.end(), 7) != nodes.end());
     CHECK(std::find(nodes.begin(), nodes.end(), 1) != nodes.end());
     CHECK(std::find(nodes.begin(), nodes.end(), 2) == nodes.end());
+}
 
+TEST_CASE("Test on finding the shortest path")
+{
+    // Check the getShortestPath method
+    MyGraph short_graph(10);
+    std::map<int, std::pair<int,int>> edges;
+    edges[1] = std::make_pair(2, 3);
+    edges[2] = std::make_pair(3, 4);
+    edges[3] = std::make_pair(4, 5);
+    edges[4] = std::make_pair(2, 1);
+    edges[5] = std::make_pair(2, 7);
+    edges[6] = std::make_pair(3, 8);
+    edges[7] = std::make_pair(3, 7);
+    edges[8] = std::make_pair(7, 9);
+    edges[9] = std::make_pair(7, 6);
+    edges[10] = std::make_pair(7, 8);
+    edges[11] = std::make_pair(7, 2);
+    edges[12] = std::make_pair(1, 2);
+    edges[13] = std::make_pair(2, 2);
+    short_graph.setEdges(edges);
+
+    std::vector<int> shortest_path = short_graph.getShortestPath(2, 5);
+    CHECK(shortest_path[0] == 2);
+    CHECK(shortest_path[1] == 3);
+    CHECK(shortest_path[2] == 4);
+    CHECK(shortest_path[3] == 5);
+    CHECK(shortest_path.size() == 4);
+
+    std::vector<int> shortest_path2 = short_graph.getShortestPath(2, 6);
+    CHECK(shortest_path2[0] == 2);
+    CHECK(shortest_path2[1] == 7);
+    CHECK(shortest_path2[2] == 6);
+    CHECK(shortest_path2.size() == 3);
 }
 
 TEST_CASE("Test the BFStree class")
@@ -160,4 +193,42 @@ TEST_CASE("Test the BFStree class")
     CHECK(test_tree3.getAncestors().size() == 2);
     CHECK(test_tree3.getAncestors()[2] != 3);
 
+}
+
+TEST_CASE("Trying HW's test case 1")
+{
+    MyGraph hw_graph(15);
+    std::map<int, std::pair<int,int>> edges;
+    edges[1] = std::make_pair(2, 6);
+    edges[2] = std::make_pair(2, 8);
+    edges[3] = std::make_pair(2, 5);
+    edges[4] = std::make_pair(6, 5);
+    edges[5] = std::make_pair(5, 8);
+    edges[6] = std::make_pair(6, 10);
+    edges[7] = std::make_pair(10, 8);
+    hw_graph.setEdges(edges);
+    std::vector<int> shortest_path = hw_graph.getShortestPath(2, 10);
+    CHECK(shortest_path[0] == 2);
+    bool condition = (shortest_path[1] == 6 || shortest_path[1] == 8);
+    CHECK(condition == true);
+    CHECK(shortest_path[2] == 10);
+    CHECK(shortest_path.size() == 3);
+}
+
+TEST_CASE("Trying HW's test case 2")
+{
+    MyGraph hwt2(5);
+    std::map<int, std::pair<int,int>> edges;
+    edges[1] = std::make_pair(1, 3);
+    edges[2] = std::make_pair(3, 2);
+    edges[3] = std::make_pair(3, 4);
+    edges[4] = std::make_pair(4, 5);
+    edges[5] = std::make_pair(5, 2);
+    hwt2.setEdges(edges);
+    std::vector<int> shortest_path = hwt2.getShortestPath(5, 1);
+    CHECK(shortest_path[0] == 5);
+    CHECK(shortest_path[1] == 2);
+    CHECK(shortest_path[2] == 3);
+    CHECK(shortest_path[3] == 1);
+    CHECK(shortest_path.size() == 4);
 }

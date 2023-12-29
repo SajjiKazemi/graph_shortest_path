@@ -93,3 +93,51 @@ void MyGraph::getUnvisitedTrees()
     this->unvisited_trees.erase(this->unvisited_trees.begin(), this->unvisited_trees.begin() + controller);
 
 }
+
+std::vector<int> MyGraph::getShortestPath(int start, int end)
+{
+    clearEverything();
+    std::vector<int> shortest_path;
+    createRootTree(start);
+
+    if(checkTree(this->unvisited_trees[0], end) == true)
+    {
+        shortest_path.push_back(start);
+        shortest_path.push_back(end);
+        return shortest_path;
+    }
+    else
+    {
+        bool found = false;
+        while (found != true && this->unvisited_trees.size() != 0)
+        {
+            for (int i=0; i<unvisited_trees.size(); i++)
+            {
+                if(checkTree(unvisited_trees[i], end))
+                {
+                    found = true;
+                    shortest_path = unvisited_trees[i].getAncestors();
+                    shortest_path.push_back(unvisited_trees[i].getRootNode());
+                    shortest_path.push_back(end);
+                    break;
+                }
+            }
+            getUnvisitedTrees();
+        }
+        if(shortest_path.empty())
+        {
+            std::cout << "No path found" << std::endl;
+            return shortest_path;
+        }
+        else
+        {
+            return shortest_path;        
+        }
+    }
+}
+
+void MyGraph::clearEverything()
+{
+    this->unvisited_trees.clear();
+    this->visited_nodes.clear();
+}

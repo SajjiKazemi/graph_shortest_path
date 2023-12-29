@@ -24,8 +24,8 @@ public:
     void createRootTree(int start);
     bool checkTree(BFStree tree, int end);
     std::vector<int> getShortestPath(int start, int end);
-    void addUnvisitedTrees(BFStree tree);
     void getUnvisitedTrees();
+    void clearEverything();
 };
 
 
