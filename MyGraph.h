@@ -3,6 +3,7 @@
 
 #include <map>
 #include <iostream>
+#include <vector>
 
 class MyGraph
 {
@@ -14,6 +15,7 @@ public:
     std::map<int, std::pair<int, int>> edges;
     int getSize();
     void setEdges(std::map<int, std::pair<int,int>> edges);
+    std::vector<int> getConnections(int node);
 };
 
 
