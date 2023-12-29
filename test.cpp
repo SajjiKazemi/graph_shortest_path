@@ -5,6 +5,7 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest.h"
 #include "helpers.h"
+#include "MyGraph.h"
 
 TEST_CASE("Test line_parser::get_command") {
     std::string line = "V 15";
@@ -16,4 +17,10 @@ TEST_CASE("Test line_parser::get_command") {
     std::string line3 = "s 1 2";
     std::string command3 = line_parser::get_command(line3);
     CHECK(command3 == "s");
+}
+
+TEST_CASE("Test the MyGraph class")
+{
+    MyGraph test_graph(5);
+    CHECK(test_graph.getSize() == 5);
 }
