@@ -32,6 +32,18 @@ void MyGraph::setNoVertices(int num_vertices)
     resetEverything();
 }
 
+bool MyGraph::checkNodeInEdges(int node)
+{
+    for (auto const& x : this->edges)
+    {
+        if(x.second.first == node || x.second.second == node)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 std::vector<int> MyGraph::getConnections(int node)
 {
     std::vector<int> connections;
@@ -109,7 +121,7 @@ void MyGraph::getUnvisitedTrees()
 std::vector<int> MyGraph::findShortestPath(int start, int end)
 {
     resetVisitedNodes();
-    if (start == end)
+    if (start == end && checkNodeInEdges(start) == true)
     {
         shortest_path.push_back(start);
         return shortest_path;
@@ -143,7 +155,7 @@ std::vector<int> MyGraph::findShortestPath(int start, int end)
         }
         if(shortest_path.empty())
         {
-            std::cout << "No path found" << std::endl;
+            std::cout << "Error: no path exists" << std::endl;
             return shortest_path;
         }
         else
@@ -169,4 +181,11 @@ void MyGraph::resetEverything()
     this->edges.clear();
     this->unvisited_trees.clear();
     this->visited_nodes.clear();
+    this->shortest_path.clear();
+    this->triedToSetEdges = false;
+}
+
+void MyGraph::setTriedToSetEdges()
+{
+    this->triedToSetEdges = true;
 }

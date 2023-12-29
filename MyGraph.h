@@ -17,6 +17,7 @@ public:
     std::vector<int> visited_nodes;
     std::vector<int> unvisited_nodes;
     std::vector<int> shortest_path;
+    bool triedToSetEdges = false;
     MyGraph();
     MyGraph(int num_vertices);
     void setNoVertices(int num_vertices);
@@ -31,6 +32,8 @@ public:
     void getUnvisitedTrees();
     void resetVisitedNodes();
     void resetEverything();
+    void setTriedToSetEdges();
+    bool checkNodeInEdges(int node);
 };
 
 
