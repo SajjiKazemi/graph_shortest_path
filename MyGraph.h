@@ -25,7 +25,7 @@ public:
     bool checkTree(BFStree tree, int end);
     std::vector<int> getShortestPath(int start, int end);
     void addUnvisitedTrees(BFStree tree);
-    std::vector<BFStree> getUnvisitedTrees();
+    void getUnvisitedTrees();
 };
 
 

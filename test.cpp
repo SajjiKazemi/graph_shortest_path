@@ -86,6 +86,43 @@ TEST_CASE("Test the MyGraph class")
     CHECK(test_graph.checkTree(test_graph.unvisited_trees[0], 1) == false);
 }
 
+TEST_CASE("More tests on MyGraph class")
+{
+    // Check the addUnvisitedTrees method
+    MyGraph my_graph(10);
+    std::map<int, std::pair<int,int>> edges;
+    edges[1] = std::make_pair(2, 3);
+    edges[2] = std::make_pair(3, 4);
+    edges[3] = std::make_pair(4, 5);
+    edges[4] = std::make_pair(2, 1);
+    edges[5] = std::make_pair(2, 7);
+    edges[6] = std::make_pair(3, 8);
+    edges[7] = std::make_pair(3, 7);
+    edges[8] = std::make_pair(7, 9);
+    edges[9] = std::make_pair(7, 6);
+    edges[10] = std::make_pair(7, 8);
+    edges[11] = std::make_pair(7, 2);
+    edges[12] = std::make_pair(1, 2);
+    edges[13] = std::make_pair(2, 2);
+    my_graph.setEdges(edges);
+    my_graph.createRootTree(2);
+    my_graph.checkTree(my_graph.unvisited_trees[0], 5);
+    CHECK(my_graph.unvisited_trees.size() == 1);
+    CHECK(my_graph.visited_nodes.size() == 1);
+    my_graph.getUnvisitedTrees();
+    CHECK(my_graph.unvisited_trees.size() == 3);
+    std::vector<int> nodes;
+    for (int i = 0; i < my_graph.unvisited_trees.size(); i++)
+    {
+        nodes.push_back(my_graph.unvisited_trees[i].getRootNode());
+    }
+    CHECK(std::find(nodes.begin(), nodes.end(), 3) != nodes.end());
+    CHECK(std::find(nodes.begin(), nodes.end(), 7) != nodes.end());
+    CHECK(std::find(nodes.begin(), nodes.end(), 1) != nodes.end());
+    CHECK(std::find(nodes.begin(), nodes.end(), 2) == nodes.end());
+
+}
+
 TEST_CASE("Test the BFStree class")
 {
     // Test the BFsearch class

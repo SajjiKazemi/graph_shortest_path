@@ -34,7 +34,8 @@ std::vector<int> MyGraph::getConnections(int node)
             connections.push_back(x.second.first);
         }
     }
-
+    std::sort(connections.begin(), connections.end());
+    connections.erase(std::unique(connections.begin(), connections.end()), connections.end());
     return connections;
 }
 
@@ -74,4 +75,21 @@ bool MyGraph::checkTree(BFStree tree, int end)
         this->visited_nodes.push_back(tree.getRootNode());
         return false;
     }
+}
+
+void MyGraph::getUnvisitedTrees()
+{   
+    int controller = this->unvisited_trees.size();
+    for(int i=0; i < controller; i++)
+    {
+        for(int j=0; j<this->unvisited_trees[i].getChildren().size(); j++)
+        {
+            if(std::find(this->visited_nodes.begin(), this->visited_nodes.end(), this->unvisited_trees[i].getChildren()[j]) == this->visited_nodes.end())
+            {
+                this->unvisited_trees.push_back(BFStree(this->unvisited_trees[i].getChildren()[j], this->getConnections(this->unvisited_trees[i].getChildren()[j]), this->unvisited_trees[i]));
+            }
+        }
+    }
+    this->unvisited_trees.erase(this->unvisited_trees.begin(), this->unvisited_trees.begin() + controller);
+
 }
