@@ -12,14 +12,17 @@
 #include <vector>
 
 TEST_CASE("Test line_parser::get_command") {
+    MyGraph test_graph;
     std::string line = "V 15";
-    std::string command = line_parser::get_command(line);
+    std::string command = line_parser::get_command(line, test_graph);
+    line_parser::analyze_command(command, line, test_graph);
     CHECK(command == "V");
     std::string line2 = "E {<1,2>,<2,3>,<3,4>}";
-    std::string command2 = line_parser::get_command(line2);
+    std::string command2 = line_parser::get_command(line2, test_graph);
+    line_parser::analyze_command(command2, line2, test_graph);
     CHECK(command2 == "E");
     std::string line3 = "s 1 2";
-    std::string command3 = line_parser::get_command(line3);
+    std::string command3 = line_parser::get_command(line3, test_graph);
     CHECK(command3 == "s");
 }
 
@@ -258,8 +261,11 @@ TEST_CASE("If loop happens")
 TEST_CASE("Test the line parses for E")
 {
     MyGraph test_graph;
-    std::string line = "E {<2,6>,<2,8>,<2,5>,<6,5>,<5,8>,<6,10>,<10,8>}";
-    std::string command = line_parser::get_command(line);
+    std::string line = "V 15";
+    std::string command = line_parser::get_command(line, test_graph);
+    line_parser::analyze_command(command, line, test_graph);
+    line = "E {<2,6>,<2,8>,<2,5>,<6,5>,<5,8>,<6,10>,<10,8>}";
+    command = line_parser::get_command(line, test_graph);
     CHECK(command == "E");
     line_parser::analyze_command(command, line, test_graph);
     CHECK(test_graph.edges[1].first == 2);
@@ -282,7 +288,7 @@ TEST_CASE("Test the line parser for V")
 {
     MyGraph test_graph;
     std::string line = "V 15";
-    std::string command = line_parser::get_command(line);
+    std::string command = line_parser::get_command(line, test_graph);
     CHECK(command == "V");
     line_parser::analyze_command(command, line, test_graph);
     CHECK(test_graph.getSize() == 15);
@@ -292,17 +298,17 @@ TEST_CASE("Test the line parser for all")
 {
     MyGraph test_graph;
     std::string line = "V 15";
-    std::string command = line_parser::get_command(line);
+    std::string command = line_parser::get_command(line, test_graph);
     CHECK(command == "V");
     line_parser::analyze_command(command, line, test_graph);
     CHECK(test_graph.getSize() == 15);
     std::string line2 = "E {<2,6>,<2,8>,<2,5>,<6,5>,<5,8>,<6,10>,<10,8>}";
-    std::string command2 = line_parser::get_command(line2);
+    std::string command2 = line_parser::get_command(line2, test_graph);
     CHECK(command2 == "E");
     line_parser::analyze_command(command2, line2, test_graph);
 
     std::string line3 = "s 2 10";
-    std::string command3 = line_parser::get_command(line3);
+    std::string command3 = line_parser::get_command(line3, test_graph);
     CHECK(command3 == "s");
     line_parser::analyze_command(command3, line3, test_graph);
     CHECK(test_graph.shortest_path[0] == 2);
@@ -316,16 +322,243 @@ TEST_CASE("Check the standard output")
 {
     MyGraph test_graph;
     std::string line = "V 15";
-    std::string command = line_parser::get_command(line);
+    std::string command = line_parser::get_command(line, test_graph);
     line_parser::analyze_command(command, line, test_graph);
     std::string line2 = "E {<2,6>,<2,8>,<2,5>,<6,5>,<5,8>,<6,10>,<10,8>}";
-    std::string command2 = line_parser::get_command(line2);
+    std::string command2 = line_parser::get_command(line2, test_graph);
     line_parser::analyze_command(command2, line2, test_graph);
     std::string line3 = "s 2 10";
-    std::string command3 = line_parser::get_command(line3);
+    std::string command3 = line_parser::get_command(line3, test_graph);
     std::ostringstream output;
     std::streambuf* oldCout = std::cout.rdbuf(output.rdbuf());
     line_parser::analyze_command(command3, line3, test_graph);
     std::cout.rdbuf(oldCout);
     CHECK(output.str() == "2-6-10\n");    
+}
+
+TEST_CASE("Check VE....s")
+{
+    MyGraph test_graph;
+    std::string line = "V 15";
+    std::string command = line_parser::get_command(line, test_graph);
+    line_parser::analyze_command(command, line, test_graph);
+    line = "E {<2,6>,<2,8>,<2,5>,<6,5>,<5,8>,<6,10>,<10,8>}";
+    command = line_parser::get_command(line, test_graph);
+    line_parser::analyze_command(command, line, test_graph);
+    line = "E ";
+    command = line_parser::get_command(line, test_graph);
+    line_parser::analyze_command(command, line, test_graph);
+    line = "E (argg)";
+    command = line_parser::get_command(line, test_graph);
+    line_parser::analyze_command(command, line, test_graph);
+    line = "s 2 10";
+    command = line_parser::get_command(line, test_graph);
+    std::ostringstream output;
+    std::streambuf* oldCout = std::cout.rdbuf(output.rdbuf());
+    line_parser::analyze_command(command, line, test_graph);
+    std::cout.rdbuf(oldCout);
+    CHECK(output.str() == "2-6-10\n");
+}
+
+TEST_CASE("Check VEE and VEEs")
+{
+    MyGraph test_graph;
+    std::string line = "V 15";
+    std::string command = line_parser::get_command(line, test_graph);
+    line_parser::analyze_command(command, line, test_graph);
+    line = "E {<2,6>,<2,8>,<2,5>,<6,5>,<5,8>,<6,10>,<10,8>}";
+    command = line_parser::get_command(line, test_graph);
+    line_parser::analyze_command(command, line, test_graph);
+    line = "E {<3,7>,<3,9>,<3,11>,<7,9>,<7,11>,<9,11>}";
+    command = line_parser::get_command(line, test_graph);
+    std::ostringstream output;
+    std::streambuf* oldCout = std::cout.rdbuf(output.rdbuf());
+    line_parser::analyze_command(command, line, test_graph);
+    std::cout.rdbuf(oldCout);
+    CHECK(output.str() == "");
+    line = "s 2 10";
+    command = line_parser::get_command(line, test_graph);
+    oldCout = std::cout.rdbuf(output.rdbuf());
+    line_parser::analyze_command(command, line, test_graph);
+    std::cout.rdbuf(oldCout);
+    CHECK(output.str() == "2-6-10\n");
+}
+
+TEST_CASE("Check VEE with the error in first E")
+{
+    MyGraph test_graph;
+    std::string line = "V 15";
+    std::string command = line_parser::get_command(line, test_graph);
+    line_parser::analyze_command(command, line, test_graph);
+    line = "E {<2,6>,<2,8>,<2,5>,<6,5>,<5,8>,<6,10>,<10,8>";
+    std::ostringstream output;
+    std::streambuf* oldCout = std::cout.rdbuf(output.rdbuf());
+    command = line_parser::get_command(line, test_graph);
+    std::cout.rdbuf(oldCout);
+    CHECK(output.str() == "Error: invalid command\n");
+    line_parser::analyze_command(command, line, test_graph);
+    line = "E {<2,6>,<2,8>,<2,5>,<6,5>,<5,8>,<6,10>,<10,8>}";
+    command = line_parser::get_command(line, test_graph);
+    output.str("");
+    oldCout = std::cout.rdbuf(output.rdbuf());
+    line_parser::analyze_command(command, line, test_graph);
+    std::cout.rdbuf(oldCout);
+    CHECK(output.str() == "");
+    line = "s 2 10";
+    oldCout = std::cout.rdbuf(output.rdbuf());
+    command = line_parser::get_command(line, test_graph);
+    std::cout.rdbuf(oldCout);
+    line_parser::analyze_command(command, line, test_graph);
+    CHECK(output.str() == "Error: no edges defined\n");
+    output.str("");
+    line = "s 8 6";
+    oldCout = std::cout.rdbuf(output.rdbuf());
+    command = line_parser::get_command(line, test_graph);
+    std::cout.rdbuf(oldCout);
+    line_parser::analyze_command(command, line, test_graph);
+    CHECK(output.str() == "Error: no edges defined\n"); 
+}
+
+TEST_CASE("VEEEs if 1st E is invalid even if the next Es are valid and the s command will be also invalid")
+{
+    MyGraph test_graph;
+    std::string line = "V 15";
+    std::string command = line_parser::get_command(line, test_graph);
+    line_parser::analyze_command(command, line, test_graph);
+    line = "E {<2,6>,<2,8>,<2,5>,<6,5>,<5,8>,<6,10>,<10,8>";
+    std::ostringstream output;
+    std::streambuf* oldCout = std::cout.rdbuf(output.rdbuf());
+    command = line_parser::get_command(line, test_graph);
+    std::cout.rdbuf(oldCout);
+    CHECK(output.str() == "Error: invalid command\n");
+    output.str("");
+    line_parser::analyze_command(command, line, test_graph);
+    CHECK(test_graph.triedToSetEdges == true);
+    line = "E {<2,6>,<2,8>,<2,5>,<6,5>,<5,8>,<6,10>,<10,8>}"; // This is the 2nd E
+    command = line_parser::get_command(line, test_graph);
+    oldCout = std::cout.rdbuf(output.rdbuf());
+    line_parser::analyze_command(command, line, test_graph);
+    std::cout.rdbuf(oldCout);
+    CHECK(output.str() == "");
+    output.str("");
+    line = "E {<3,7>,<3,9>,<3,11>,<7,9>,<7,11>,<9,11>}"; // This is the 3rd E
+    oldCout = std::cout.rdbuf(output.rdbuf());
+    command = line_parser::get_command(line, test_graph);
+    line_parser::analyze_command(command, line, test_graph);
+    std::cout.rdbuf(oldCout);
+    CHECK(output.str() == "");
+    output.str("");
+    line = "s 2 10"; // This is the s command
+    oldCout = std::cout.rdbuf(output.rdbuf());
+    command = line_parser::get_command(line, test_graph);
+    line_parser::analyze_command(command, line, test_graph);
+    std::cout.rdbuf(oldCout);
+    CHECK(output.str() == "Error: no edges defined\n");
+}
+
+TEST_CASE("Test VEVEs")
+{
+    MyGraph test_graph;
+    std::string line = "V 15";
+    std::string command = line_parser::get_command(line, test_graph);
+    line_parser::analyze_command(command, line, test_graph);
+    line = "E {<-2,6>,<2,8>,<2,5>,<6,5>,<5,8>,<6,10>,<10,8>}";
+    std::ostringstream output;
+    std::streambuf* oldCout = std::cout.rdbuf(output.rdbuf());
+    command = line_parser::get_command(line, test_graph);
+    std::cout.rdbuf(oldCout);
+    CHECK(output.str() == "Error: invalid command\n");
+    line_parser::analyze_command(command, line, test_graph);
+    CHECK(test_graph.triedToSetEdges == true);
+    line = "V 16";
+    output.str("");
+    command = line_parser::get_command(line, test_graph);
+    oldCout = std::cout.rdbuf(output.rdbuf());
+    line_parser::analyze_command(command, line, test_graph);
+    CHECK(test_graph.triedToSetEdges == false);
+    std::cout.rdbuf(oldCout);
+    CHECK(output.str() == "");
+    line = "E {<2,6>,<2,8>,<2,5>,<6,5>,<5,8>,<6,10>,<10,8>}";
+    command = line_parser::get_command(line, test_graph);
+    output.str("");
+    oldCout = std::cout.rdbuf(output.rdbuf());
+    line_parser::analyze_command(command, line, test_graph);
+    std::cout.rdbuf(oldCout);
+    CHECK(output.str() == "");
+    line = "s 2 10";
+    command = line_parser::get_command(line, test_graph);
+    output.str("");
+    oldCout = std::cout.rdbuf(output.rdbuf());
+    line_parser::analyze_command(command, line, test_graph);
+    std::cout.rdbuf(oldCout);
+    CHECK(output.str() == "2-6-10\n");
+}
+
+TEST_CASE("If any vertice's id is higher than the number of vertices")
+{
+    MyGraph test_graph;
+    std::string line = "V 15";
+    std::string command = line_parser::get_command(line, test_graph);
+    line_parser::analyze_command(command, line, test_graph);
+    line = "E {<2,16>,<2,8>,<2,5>,<6,5>,<5,8>,<6,10>,<10,8>}";
+    std::ostringstream output;
+    std::streambuf* oldCout = std::cout.rdbuf(output.rdbuf());
+    command = line_parser::get_command(line, test_graph);
+    line_parser::analyze_command(command, line, test_graph);
+    std::cout.rdbuf(oldCout);
+    CHECK(output.str() == "Error: edge is not valid\n");
+}
+
+TEST_CASE("When there is no path to desired node")
+{
+    MyGraph test_graph;
+    std::string line = "V 15";
+    std::string command = line_parser::get_command(line, test_graph);
+    line_parser::analyze_command(command, line, test_graph);
+    line = "E {<2,6>,<2,8>,<2,5>,<6,5>,<5,8>,<6,10>,<10,8>}";
+    command = line_parser::get_command(line, test_graph);
+    line_parser::analyze_command(command, line, test_graph);
+    line = "s 2 7";
+    command = line_parser::get_command(line, test_graph);
+    std::ostringstream output;
+    std::streambuf* oldCout = std::cout.rdbuf(output.rdbuf());
+    line_parser::analyze_command(command, line, test_graph);
+    std::cout.rdbuf(oldCout);
+    CHECK(output.str() == "Error: no path exists\n");
+}
+
+TEST_CASE("Loop for a node that is not in edges")
+{
+    MyGraph test_graph;
+    std::string line = "V 15";
+    std::string command = line_parser::get_command(line, test_graph);
+    line_parser::analyze_command(command, line, test_graph);
+    line = "E {<2,6>,<2,8>,<2,5>,<6,5>,<5,8>,<6,10>,<10,8>}";
+    command = line_parser::get_command(line, test_graph);
+    line_parser::analyze_command(command, line, test_graph);
+    line = "s 1 1";
+    command = line_parser::get_command(line, test_graph);
+    std::ostringstream output;
+    std::streambuf* oldCout = std::cout.rdbuf(output.rdbuf());
+    line_parser::analyze_command(command, line, test_graph);
+    std::cout.rdbuf(oldCout);
+    CHECK(output.str() == "Error: no path exists\n");
+}
+
+TEST_CASE("Loop for a node that exists in edges")
+{
+    MyGraph test_graph;
+    std::string line = "V 15";
+    std::string command = line_parser::get_command(line, test_graph);
+    line_parser::analyze_command(command, line, test_graph);
+    line = "E {<2,6>,<2,8>,<2,5>,<6,5>,<5,8>,<6,10>,<10,8>}";
+    command = line_parser::get_command(line, test_graph);
+    line_parser::analyze_command(command, line, test_graph);
+    line = "s 2 2";
+    command = line_parser::get_command(line, test_graph);
+    std::ostringstream output;
+    std::streambuf* oldCout = std::cout.rdbuf(output.rdbuf());
+    line_parser::analyze_command(command, line, test_graph);
+    std::cout.rdbuf(oldCout);
+    CHECK(output.str() == "2\n");
 }
