@@ -16,6 +16,7 @@ public:
     std::vector<BFStree> unvisited_trees;
     std::vector<int> visited_nodes;
     std::vector<int> unvisited_nodes;
+    std::vector<int> shortest_path;
     MyGraph();
     MyGraph(int num_vertices);
     void setNoVertices(int num_vertices);
@@ -25,9 +26,11 @@ public:
     bool isConnected(int start, int end);
     void createRootTree(int start);
     bool checkTree(BFStree tree, int end);
-    std::vector<int> getShortestPath(int start, int end);
+    std::vector<int> findShortestPath(int start, int end);
+    std::vector<int> getShortestPath();
     void getUnvisitedTrees();
-    void clearEverything();
+    void resetVisitedNodes();
+    void resetEverything();
 };
 
 

@@ -22,12 +22,14 @@ int MyGraph::getSize()
 
 void MyGraph::setEdges(std::map<int, std::pair<int,int>> edges)
 {
+    resetEverything();
     this->edges = edges;
 }
 
 void MyGraph::setNoVertices(int num_vertices)
 {
     this->num_vertices = num_vertices;
+    resetEverything();
 }
 
 std::vector<int> MyGraph::getConnections(int node)
@@ -104,11 +106,9 @@ void MyGraph::getUnvisitedTrees()
 
 }
 
-std::vector<int> MyGraph::getShortestPath(int start, int end)
+std::vector<int> MyGraph::findShortestPath(int start, int end)
 {
-    clearEverything();
-    std::vector<int> shortest_path;
-    
+    resetVisitedNodes();
     if (start == end)
     {
         shortest_path.push_back(start);
@@ -153,8 +153,20 @@ std::vector<int> MyGraph::getShortestPath(int start, int end)
     }
 }
 
-void MyGraph::clearEverything()
+std::vector<int> MyGraph::getShortestPath()
 {
+    return this->shortest_path;
+}
+
+void MyGraph::resetVisitedNodes()
+{
+    this->unvisited_trees.clear();
+    this->visited_nodes.clear();
+}
+
+void MyGraph::resetEverything()
+{
+    this->edges.clear();
     this->unvisited_trees.clear();
     this->visited_nodes.clear();
 }
