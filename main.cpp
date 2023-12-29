@@ -6,9 +6,6 @@
 
 int main(int argc, char** argv) {
 
-    // separator character
-    const char comma = ',';
-
     // read from stdin until EOF
     while (!std::cin.eof()) {
         // print a promt
@@ -20,6 +17,6 @@ int main(int argc, char** argv) {
 
         // get the command from the line
         std::string command = line_parser::get_command(line);
-        std::cout << "Command: " << command << std::endl;
+        line_parser::analyze_command(command, line);
     }
 }
