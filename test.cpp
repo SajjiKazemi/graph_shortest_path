@@ -67,4 +67,29 @@ TEST_CASE("Test the BFStree class")
     CHECK(test_tree.getChildren()[0] == 2);
     CHECK(test_tree.getChildren()[1] == 3);
     CHECK(test_tree.getChildren()[2] == 4);
+    CHECK(test_tree.getAncestors().size() == 0);
+
+    // Test the isIncluded method
+    CHECK(test_tree.isIncluded(2) == true);
+    CHECK(test_tree.isIncluded(3) == true);
+    CHECK(test_tree.isIncluded(4) == true);
+    CHECK(test_tree.isIncluded(5) == false);
+    CHECK(test_tree.isIncluded(1) == false);
+
+    // Test adding ancestors
+    std::vector<int> children2;
+    children2.push_back(5);
+    children2.push_back(6);
+    children2.push_back(7);
+    BFStree test_tree2(test_tree.getChildren()[0], children2, test_tree);
+    CHECK(test_tree2.getAncestors()[0] == 1);
+    CHECK(test_tree2.getAncestors().size() == 1);
+    CHECK(test_tree2.getAncestors()[1] != 2);
+
+    BFStree test_tree3(test_tree2.getChildren()[0], children, test_tree2);
+    CHECK(test_tree3.getAncestors()[0] == 1);
+    CHECK(test_tree3.getAncestors()[1] == 2);
+    CHECK(test_tree3.getAncestors().size() == 2);
+    CHECK(test_tree3.getAncestors()[2] != 3);
+
 }
