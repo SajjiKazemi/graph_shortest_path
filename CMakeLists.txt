@@ -13,7 +13,7 @@ endif()
 
 # create the main executable
 ## add additional .cpp files if needed
-add_executable(main main.cpp helpers.cpp)
+add_executable(main main.cpp helpers.cpp MyGraph.cpp BFStree.cpp)
 
 # create the executable for tests
 add_executable(tests test.cpp helpers.cpp MyGraph.cpp BFStree.cpp)
