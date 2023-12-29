@@ -73,6 +73,17 @@ TEST_CASE("Test the MyGraph class")
         test_graph.unvisited_trees[0].getChildren().end(), 5) != test_graph.unvisited_trees[0].getChildren().end());
     CHECK(test_graph.unvisited_trees[0].getAncestors().size() == 0);
 
+
+    // Check the checkTree method
+    CHECK(test_graph.checkTree(test_graph.unvisited_trees[0], 2) == true);
+    CHECK(test_graph.checkTree(test_graph.unvisited_trees[0], 3) == true);
+    CHECK(test_graph.visited_nodes.size() == 0);
+    CHECK(test_graph.checkTree(test_graph.unvisited_trees[0], 4) == false);
+    CHECK(test_graph.visited_nodes.size() == 1);
+    CHECK(test_graph.visited_nodes[0] == 1);
+    CHECK(test_graph.checkTree(test_graph.unvisited_trees[0], 5) == true);
+    CHECK(test_graph.checkTree(test_graph.unvisited_trees[0], 6) == false);
+    CHECK(test_graph.checkTree(test_graph.unvisited_trees[0], 1) == false);
 }
 
 TEST_CASE("Test the BFStree class")

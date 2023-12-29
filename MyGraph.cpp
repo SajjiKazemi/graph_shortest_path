@@ -62,3 +62,16 @@ void MyGraph::createRootTree(int start)
     }
     this->unvisited_trees.push_back(root_tree);
 }
+
+bool MyGraph::checkTree(BFStree tree, int end)
+{
+    if(tree.isIncluded(end))
+    {
+        return true;
+    }
+    else
+    {
+        this->visited_nodes.push_back(tree.getRootNode());
+        return false;
+    }
+}
