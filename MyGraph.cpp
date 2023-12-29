@@ -11,3 +11,8 @@ int MyGraph::getSize()
 {
     return this->num_vertices;
 }
+
+void MyGraph::setEdges(std::map<int, std::pair<int,int>> edges)
+{
+    this->edges = edges;
+}

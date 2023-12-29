@@ -11,7 +11,9 @@ private:
 
 public:
     MyGraph(int num_vertices);
+    std::map<int, std::pair<int, int>> edges;
     int getSize();
+    void setEdges(std::map<int, std::pair<int,int>> edges);
 };
 
 
