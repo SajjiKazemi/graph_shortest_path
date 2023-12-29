@@ -29,33 +29,50 @@ namespace line_parser{
         return command;
     }    
 
-    std::vector<std::string> split(std::string line, char separator){
+    std::vector<std::string> analyze_command(std::string command, std::string line)
+    {
         std::vector<std::string> result;
-        std::istringstream input(line);
-        while (!input.eof())
+        if(command == "V")
         {
-            std::string num;
-            input >> num;
-            if (input.fail())
-            {
-                std::cerr << "Error parsing a number\n";
-                break;
-            }
-            else
-                result.push_back(num);
+            std::istringstream input(line);
+            std::string prefix;
+            int number;
 
-            if (input.eof())
-                break;
-
-            char separator;
-            input >> separator;
-
-            if (input.fail() || separator != separator)
-            {
-                std::cerr << "Error parsing separator\n";
-                break;
-            }
+            input >> prefix >> number;
+            result.push_back(std::to_string(number));            
+            return result;
         }
-        return result;
+        else if (command == "E")
+        {
+            std::regex pattern(R"(<(\d+),(\d+)>)");
+            std::sregex_token_iterator iter(line.begin(), line.end(), pattern, {1,2});
+            std::sregex_token_iterator end;
+            while (iter != end) 
+            {
+                std::ostringstream oss;
+                oss << "(" << *iter++ << ", " << *iter++ << ")";
+                std::string pair = oss.str();
+                result.push_back(pair);
+            }
+            std::cout << result[0] << result[1] << result[2] << std::endl;
+            return result;
+        }
+        else if (command == "s")
+        {
+            std::istringstream input(line);
+            std::string prefix;
+            int start;
+            int end;
+
+            input >> prefix >> start >> end;
+            result.push_back(std::to_string(start));
+            result.push_back(std::to_string(end));
+            std::cout << result[0] << result[1] << std::endl;
+            return result;
+        }
+        
+
+        
     }
+
 }
