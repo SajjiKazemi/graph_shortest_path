@@ -619,5 +619,46 @@ TEST_CASE("HW's test case exactly")
     line_parser::analyze_command(command, line, test_graph);
     std::cout.rdbuf(oldCout2);
     CHECK(output2.str() == "5-2-3-1\n");
-    
+}
+
+TEST_CASE("Test a complex case")
+{
+    MyGraph test_graph;
+    std::string line = "V 10";
+    std::string command = line_parser::get_command(line, test_graph);
+    line_parser::analyze_command(command, line, test_graph);
+    line = "E {<1,2>,<2,3>,<3,4>,<4,5>,<5,8>,<8,7>,<7,6>,<6,8>,<9,1>,<3,8>,<3,7>,<2,7>,<9,5>,<9,7>}";
+    command = line_parser::get_command(line, test_graph);
+    line_parser::analyze_command(command, line, test_graph);
+    std::ostringstream output1;
+    std::streambuf* oldCout1 = std::cout.rdbuf(output1.rdbuf());
+    line = "s 9 6";
+    command = line_parser::get_command(line, test_graph);
+    line_parser::analyze_command(command, line, test_graph);
+    std::cout.rdbuf(oldCout1);
+    CHECK(output1.str() == "9-7-6\n");
+    line = "s 9 8";
+    command = line_parser::get_command(line, test_graph);
+    std::ostringstream output2;
+    std::streambuf* oldCout2 = std::cout.rdbuf(output2.rdbuf());
+    line_parser::analyze_command(command, line, test_graph);
+    std::cout.rdbuf(oldCout2);
+    bool condition = (output2.str() == "9-7-8\n" || output2.str() == "9-5-8\n");
+    CHECK(condition == true);
+    line = "s 9 9";
+    command = line_parser::get_command(line, test_graph);
+    std::ostringstream output3;
+    std::streambuf* oldCout3 = std::cout.rdbuf(output3.rdbuf());
+    line_parser::analyze_command(command, line, test_graph);
+    std::cout.rdbuf(oldCout3);
+    CHECK(output3.str() == "9\n");
+    line = "s 1 8";
+    command = line_parser::get_command(line, test_graph);
+    std::ostringstream output4;
+    std::streambuf* oldCout4 = std::cout.rdbuf(output4.rdbuf());
+    line_parser::analyze_command(command, line, test_graph);
+    std::cout.rdbuf(oldCout4);
+    condition = (output4.str() == "1-2-3-8\n" || output4.str() == "1-2-7-8\n" ||
+             output4.str() == "1-9-5-8\n" || output4.str() == "1-9-7-8\n");
+    CHECK(condition == true);
 }
