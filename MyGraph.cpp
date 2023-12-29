@@ -1,5 +1,6 @@
 #include "MyGraph.h"
 #include <vector>
+#include <algorithm>
 
 // Constructor definition
 MyGraph::MyGraph(int num_vertices)
@@ -35,3 +36,19 @@ std::vector<int> MyGraph::getConnections(int node)
 
     return connections;
 }
+
+bool MyGraph::isConnected(int start, int end)
+    {
+        std::vector<int> connections = getConnections(start);    
+            
+        auto it = std::find(connections.begin(), connections.end(), end);
+        if(it != connections.end())
+            {
+                return true;
+            }
+        else
+            {
+                return false;
+            }
+    }
+    
