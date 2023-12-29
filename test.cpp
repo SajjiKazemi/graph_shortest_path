@@ -232,3 +232,17 @@ TEST_CASE("Trying HW's test case 2")
     CHECK(shortest_path[3] == 1);
     CHECK(shortest_path.size() == 4);
 }
+
+TEST_CASE("If loop happens")
+{
+    MyGraph loop_graph(5);
+    std::map<int, std::pair<int,int>> edges;
+    edges[1] = std::make_pair(2, 3);
+    edges[2] = std::make_pair(3, 4);
+    edges[3] = std::make_pair(4, 5);
+    edges[4] = std::make_pair(5, 2);
+    loop_graph.setEdges(edges);
+    std::vector<int> shortest_path = loop_graph.getShortestPath(2, 2);
+    CHECK(shortest_path[0] == 2);
+    CHECK(shortest_path.size() == 1);
+}
