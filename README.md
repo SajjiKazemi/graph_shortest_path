@@ -4,8 +4,6 @@
 
 This project is designed and implemented to find the shortest path between any two nodes of a randomly generated graph using the breadth-first research technique. It marks the second phase of a broader project aimed at identifying a vertex cover for streets with intersections. The ultimate goal is to determine the vertex cover of a randomly generated graph, addressing the Vertex Cover problem, a specific type of optimization problem in graph theory. For a brief understanding of the vertex cover concept, refer to [this link](https://en.wikipedia.org/wiki/Vertex_cover#:~:text=In%20graph%20theory%2C%20a%20vertex,every%20edge%20of%20the%20graph).
 
-### Detailed Explanation
-
 ## Getting Started
 
 ### Clone the Repository
